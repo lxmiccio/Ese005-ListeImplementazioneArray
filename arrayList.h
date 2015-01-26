@@ -1,3 +1,5 @@
+typedef int * AList;
+
 /*
  * Inserts the new key at the beginning of the list.
  * *size is the number of elements in the list.
@@ -7,7 +9,7 @@
  * Returns 0 on success.
  * Returns -1 if memory allocation fails.
  */
-int ALInsertAtBeginning(int **list, int *size, int *dimension, int key);
+int ALInsertAtBeginning(AList *list, int *size, int *dimension, int key);
 
 /*
  * Inserts the new key at the end of the list.
@@ -18,7 +20,7 @@ int ALInsertAtBeginning(int **list, int *size, int *dimension, int key);
  * Returns 0 on success.
  * Returns -1 if memory allocation fails.
  */
-int ALInsertAtEnd(int **list, int *size, int *dimension, int key);
+int ALInsertAtEnd(AList *list, int *size, int *dimension, int key);
 
 /*
  * Inserts the new key at the specified positon of the list.
@@ -31,7 +33,7 @@ int ALInsertAtEnd(int **list, int *size, int *dimension, int key);
  * Returns 0 on success.
  * Returns -1 if memory allocation fails.
  */
-int ALInsertAtPosition(int **list, int *size, int *dimension, int key, int position);
+int ALInsertAtPosition(AList *list, int *size, int *dimension, int key, int position);
 
 /*
  * Gives the key at the specified position. * 
@@ -39,7 +41,7 @@ int ALInsertAtPosition(int **list, int *size, int *dimension, int key, int posit
  * Returns 0 on success.
  * Returns -1 if there is no key at the specified position
  */ 
-int ALGetKey(int *list, int size, int position, int *key);
+int ALGetKey(AList list, int size, int position, int *key);
 
 /*
  * Gives the position of the first element, starting from startPosition, that
@@ -48,7 +50,7 @@ int ALGetKey(int *list, int size, int position, int *key);
  * Returns 0 on success.
  * Returns -1 if not found. 
  */ 
-int ALFindKey(int *list, int size, int key, int startPosition, int *position);
+int ALFindKey(AList list, int size, int key, int startPosition, int *position);
 
 /*
  * Removes the first element of the list.
@@ -58,7 +60,7 @@ int ALFindKey(int *list, int size, int key, int startPosition, int *position);
  * Returns 0 on success.
  * Returns -1 in case of empty list.
  */
-int ALRemoveFirst(int *list, int *size);
+int ALRemoveFirst(AList list, int *size);
 
 /*
  * Remove the last element of the list.
@@ -68,7 +70,7 @@ int ALRemoveFirst(int *list, int *size);
  * Returns 0 on success.
  * Returns -1 in case of empty list.
  */
-int LLRemoveLast(int *list, int *size);
+int ALRemoveLast(AList list, int *size);
 
 /*
  * Remove the element at the specified position.
@@ -81,7 +83,7 @@ int LLRemoveLast(int *list, int *size);
  * Returns 0 on success.
  * Returns -1 in case it does not exist any element at the specified position
  */
-int ALRemoveAtPosition(int *list, int *size, int position);
+int ALRemoveAtPosition(AList list, int *size, int position);
 
 /*
  * Empties the list.
@@ -92,7 +94,7 @@ int ALRemoveAtPosition(int *list, int *size, int position);
  * Returns 0 on success.
  * Return -1 in case of emtpy list. 
  */
-int ALEmptyList(int **list, int *size, int *dimension);
+int ALEmptyList(AList *list, int *size, int *dimension);
 
 /*
  * Reduces the dimension of the list to its size.
@@ -100,4 +102,4 @@ int ALEmptyList(int **list, int *size, int *dimension);
  * Returns 0 on success.
  * Return -1 if memory allocation fails. 
  */
-int ALShrink(int **list, int *size, int *dimension);
+int ALShrink(AList *list, int *size, int *dimension);
