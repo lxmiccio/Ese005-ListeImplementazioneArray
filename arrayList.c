@@ -10,7 +10,7 @@
  * Returns 0 on success.
  * Returns -1 if memory allocation fails.
  */
-int ALIncreaseAndCopy(AList *list, int *size, int *dimension) {
+int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
     // TODO Implement code here
     return -1;
 }
