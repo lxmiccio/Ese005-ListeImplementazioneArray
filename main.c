@@ -5,7 +5,8 @@
 
 #define ERRORMESSAGE_MAXLEN 100
 
-void assertSize(int code, int currentSize, int expectedSize);
+void assertSize(int code, int currentSize, int expectedSize, int currentDimension);
+void assertSizeEqualsDimension(int code, int currentSize, int currentDimension);
 void assertKey(int code, AList list, int listSize, int position, int expectedKey);
 void assertPosition(int code, AList list, int listSize, int key, int startPosition, int expectedPosition);
 void assertReturnCode(int assertionCode, int currentReturnCode, int expectedReturnCode);
@@ -25,9 +26,7 @@ int main(int argc, char** argv) {
     int position;
     int ret; // return value
     
-    // TODO shrink e assertdimension 
-    
-    assertSize(10, listSize, 0);
+    assertSize(10, listSize, 0, listDim);
     
     // Operazioni 20
     ret = ALInsertAtBeginning(&list, &listSize, &listDim, 100);
@@ -37,7 +36,7 @@ int main(int argc, char** argv) {
     ret = ALInsertAtBeginning(&list, &listSize, &listDim, 300);
     assertSuccessfullExecution(2002, ret);
     
-    assertSize(20, listSize, 3);
+    assertSize(20, listSize, 3, listDim);
     assertKey(21, list, listSize, 0, 300);
     assertKey(22, list, listSize, 0, 300);
     assertKey(23, list, listSize, 1, 200);
@@ -48,7 +47,7 @@ int main(int argc, char** argv) {
     ret = ALRemoveFirst(list, &listSize);
     assertSuccessfullExecution(3000, ret);
     
-    assertSize(30, listSize, 2);
+    assertSize(30, listSize, 2, listDim);
     assertKey(31, list, listSize, 0, 200);
     assertKey(32, list, listSize, 1, 100);
     
@@ -56,8 +55,13 @@ int main(int argc, char** argv) {
     ret = ALRemoveLast(list, &listSize);
     assertSuccessfullExecution(4000, ret);
         
-    assertSize(40, listSize, 1);
+    assertSize(40, listSize, 1, listDim);
     assertKey(41, list, listSize, 0, 200);
+    
+    // Operazioni 45
+    ret = ALShrink(&list, &listSize, &listDim);
+    assertSize(45, listSize, 1, listDim);
+    assertSizeEqualsDimension(46, listSize, listDim);
     
     // Operazioni 50
     for(i=0; i<5; i++) {
@@ -65,7 +69,7 @@ int main(int argc, char** argv) {
         assertSuccessfullExecution(5000+i, ret);
     }
     
-    assertSize(50, listSize, 6);
+    assertSize(50, listSize, 6, listDim);
     assertKey(51, list, listSize, 0, 200);
     for(i=0; i<5; i++) {
         assertKey(52, list, listSize, 1+i, i*1000);
@@ -75,7 +79,7 @@ int main(int argc, char** argv) {
     ret = ALRemoveAtPosition(list, &listSize,1);
     assertSuccessfullExecution(6000, ret);
     
-    assertSize(60, listSize, 5);
+    assertSize(60, listSize, 5, listDim);
     assertKey(61, list, listSize, 0, 200);
     for(i=1; i<5; i++) {
         assertKey(62, list, listSize, i, i*1000);
@@ -85,13 +89,13 @@ int main(int argc, char** argv) {
     ret = ALInsertAtPosition(&list, &listSize, &listDim, 10000, 3);
     assertSuccessfullExecution(7000, ret);
     
-    assertSize(70, listSize, 6);
+    assertSize(70, listSize, 6, listDim);
     assertKey(71, list, listSize, 3, 10000);
     
     // Operazioni 80
     ret = ALInsertAtEnd(&list, &listSize, &listDim, 10000);
     assertSuccessfullExecution(8000, ret);
-    assertSize(80, listSize, 7);
+    assertSize(80, listSize, 7, listDim);
     assertKey(81, list, listSize, 3, 10000);
     assertKey(82, list, listSize, 6, 10000);
     assertPosition(83, list, listSize, 10000, 0, 3);
@@ -104,15 +108,14 @@ int main(int argc, char** argv) {
         assertSuccessfullExecution(9000+i, ret);
     }
     
-    assertSize(90, listSize, 0);
-    
-    
+    assertSize(90, listSize, 0, listDim);
+        
     // Operazioni 100
     for(i=0; i<10; i++) {
         ret = ALInsertAtEnd(&list, &listSize, &listDim, 10+i);
         assertSuccessfullExecution(10000+i, ret);
     }
-    assertSize(100, listSize, 10);
+    assertSize(100, listSize, 10, listDim);
     for(i=0; i<10; i++)
         assertKey(101, list, listSize, i, 10+i);
     
@@ -120,7 +123,7 @@ int main(int argc, char** argv) {
     ret = ALEmptyList(&list, &listSize, &listDim);   // always free the memory when the list is not
                                 // needed anymore
     assertSuccessfullExecution(11000, ret);
-    assertSize(110, listSize, 0);
+    assertSize(110, listSize, 0, listDim);
     
     // Operazioni 120
     ret = ALEmptyList(&list, &listSize, &listDim);
@@ -150,10 +153,26 @@ int main(int argc, char** argv) {
     return (EXIT_SUCCESS);
 }
 
-void assertSize(int code, int currentSize, int expectedSize) {
+void assertSize(int code, int currentSize, int expectedSize, int currentDimension) {
     char message[ERRORMESSAGE_MAXLEN];
     if(currentSize != expectedSize) {
         sprintf(message, "Dimensione attesa: %d - Dimensione corrente: %d\n", expectedSize, currentSize);
+        printAndExit(code, message);
+    }
+    else if (currentDimension < expectedSize) {
+        sprintf(message, "Elementi allocati (%d) inferiori alla dimensione corrente: (%d)\n", currentDimension, currentSize);
+        printAndExit(code, message);
+    }
+    else
+        printf("Asserzione %d verificata\n", code);
+    return;
+}
+
+
+void assertSizeEqualsDimension(int code, int currentSize, int currentDimension) {
+    char message[ERRORMESSAGE_MAXLEN];
+    if(currentSize != currentDimension) {
+        sprintf(message, "Numero elementi allocati (%d) diverso dalla dimensione corrente: (%d)\n", currentDimension, currentSize);
         printAndExit(code, message);
     }
     else
