@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 typedef int * AList;
@@ -104,4 +105,4 @@ int ALEmptyList(AList *list, int *size, int *dimension);
  * Returns 0 on success.
  * Return -1 if memory allocation fails. 
  */
-int ALShrink(AList *list, int *size, int *dimension);
+int ALShrink(AList *list, int size, int *dimension);

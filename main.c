@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
     assertKey(41, list, listSize, 0, 200);
     
     // Operazioni 45
-    ret = ALShrink(&list, &listSize, &listDim);
+    ret = ALShrink(&list, listSize, &listDim);
     assertSize(45, listSize, 1, listDim);
     assertSizeEqualsDimension(46, listSize, listDim);
     
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     }
     
     // Operazioni 60
-    ret = ALRemoveAtPosition(list, &listSize,1);
+    ret = ALRemoveAtPosition(list, &listSize, 1);
     assertSuccessfullExecution(6000, ret);
     
     assertSize(60, listSize, 5, listDim);
