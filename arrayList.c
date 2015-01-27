@@ -1,4 +1,19 @@
+#include <stdlib.h>
 #include "arrayList.h"
+
+/*
+ * Increases the dimension of the Array List.
+ * *size is the number of elements in the list.
+ * *dimension is the number of elements allocated for the list: it will be doubled
+ *  after the function call. In case of 0, it is set to 2.
+ * 
+ * Returns 0 on success.
+ * Returns -1 if memory allocation fails.
+ */
+int ALIncreaseAndCopy(AList *list, int *size, int *dimension) {
+    // TODO Implement code here
+    return -1;
+}
 
 /*
  * Inserts the new key at the beginning of the list.
