@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
     AList list = NULL;
     int listSize = 0;
     int listDim = 0;
-    int i;
+    int i, s;
     int key;
     int position;
     int ret; // return value
@@ -103,7 +103,8 @@ int main(int argc, char** argv) {
 
     // Operazioni 90
     // Svuoto la lista
-    for(i=0; i<listSize; i++) {
+    s = listSize;
+    for(i=0; i<s; i++) {
         ret = ALRemoveLast(list, &listSize);
         assertSuccessfullExecution(9000+i, ret);
     }
