@@ -10,9 +10,22 @@
  * Returns 0 on success.
  * Returns -1 if memory allocation fails.
  */
-int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
-    // TODO Implement code here
-    return -1;
+int ALIncreaseAndCopy(AList *list, int size, int *dimension)
+{
+    int allocationError = -1, counter;
+    if(*dimension == 0)
+        *dimension = 1;
+    AList newArrayList = (AList)malloc(2*(*dimension)*sizeof(int));
+    if(newArrayList != NULL)
+    {
+        allocationError = 0;
+        for(counter = 0; counter < size; counter++)
+            newArrayList[counter] = (*list)[counter];
+        free(*list);
+        *list = newArrayList;      
+        *dimension *= 2;
+    }
+    return allocationError;
 }
 
 /*
@@ -24,9 +37,20 @@ int ALIncreaseAndCopy(AList *list, int size, int *dimension) {
  * Returns 0 on success.
  * Returns -1 if memory allocation fails.
  */
-int ALInsertAtBeginning(AList *list, int *size, int *dimension, int key) {
-    // TODO Implement code here
-    return -1;
+int ALInsertAtBeginning(AList *list, int *size, int *dimension, int key)
+{
+    int allocationError = -1, counter, returnValue;
+    if(*dimension == *size)
+        returnValue = ALIncreaseAndCopy(list, *size, dimension);
+    if(returnValue == 0)
+    {
+        allocationError = 0;
+        for(counter=*size; counter>0; counter--)
+            (*list)[counter] = (*list)[counter-1];
+        (*list)[0] = key;
+        (*size)++;
+    }
+    return allocationError;
 }
 
 /*
