@@ -39,7 +39,7 @@ int ALIncreaseAndCopy(AList *list, int size, int *dimension)
  */
 int ALInsertAtBeginning(AList *list, int *size, int *dimension, int key)
 {
-    int allocationError = -1, counter, returnValue;
+    int allocationError = -1, counter, returnValue = 0;
     if(*dimension == *size)
         returnValue = ALIncreaseAndCopy(list, *size, dimension);
     if(returnValue == 0)
@@ -62,9 +62,18 @@ int ALInsertAtBeginning(AList *list, int *size, int *dimension, int key)
  * Returns 0 on success.
  * Returns -1 if memory allocation fails.
  */
-int ALInsertAtEnd(AList *list, int *size, int *dimension, int key) {
-    // TODO Implement code here
-    return -1;
+int ALInsertAtEnd(AList *list, int *size, int *dimension, int key)
+{
+    int allocationError = -1, returnValue = 0;
+    if(*dimension == *size)
+        returnValue = ALIncreaseAndCopy(list, *size, dimension);
+    if(returnValue == 0)
+    {
+        allocationError = 0;
+        (*list)[*size] = key;
+        (*size)++;
+    }
+    return allocationError;
 }
 
 /*
@@ -78,9 +87,20 @@ int ALInsertAtEnd(AList *list, int *size, int *dimension, int key) {
  * Returns 0 on success.
  * Returns -1 if memory allocation fails.
  */
-int ALInsertAtPosition(AList *list, int *size, int *dimension, int key, int position) {
-    // TODO Implement code here
-    return -1;
+int ALInsertAtPosition(AList *list, int *size, int *dimension, int key, int position)
+{
+    int allocationError = -1, counter, returnValue = 0;
+    if(*dimension == *size)
+        returnValue = ALIncreaseAndCopy(list, *size, dimension);
+    if(returnValue == 0)
+    {
+        allocationError = 0;
+        for(counter=(*size)-1; counter>=position; counter--)
+            (*list)[counter+1] = (*list)[counter];
+        (*list)[position] = key;
+        (*size)++;
+    }
+    return allocationError;
 }
 
 /*
@@ -89,9 +109,15 @@ int ALInsertAtPosition(AList *list, int *size, int *dimension, int key, int posi
  * Returns 0 on success.
  * Returns -1 if there is no key at the specified position
  */ 
-int ALGetKey(AList list, int size, int position, int *key) {
-    // TODO Implement code here
-    return -1;
+int ALGetKey(AList list, int size, int position, int *key)
+{
+    int foundKey = -1;
+    if(position >= 0 && size > 0 && position < size)
+    {
+        foundKey = 0;
+        *key = list[position];
+    }
+    return foundKey;
 }
 
 /*
@@ -101,9 +127,19 @@ int ALGetKey(AList list, int size, int position, int *key) {
  * Returns 0 on success.
  * Returns -1 if not found. 
  */ 
-int ALFindKey(AList list, int size, int key, int startPosition, int *position) {
-    // TODO Implement code here
-    return -1;
+int ALFindKey(AList list, int size, int key, int startPosition, int *position)
+{
+    int counter, foundKey = -1;
+    if(startPosition >= 0 && size > 0 && startPosition < size)
+    {
+        for(counter = startPosition; counter < size && foundKey != 0; counter++)
+            if(list[counter] == key)
+            {
+                foundKey = 0;
+                *position = counter;
+            }
+    }
+    return foundKey;
 }
 
 /*
@@ -114,9 +150,17 @@ int ALFindKey(AList list, int size, int key, int startPosition, int *position) {
  * Returns 0 on success.
  * Returns -1 in case of empty list.
  */
-int ALRemoveFirst(AList list, int *size) {
-    // TODO Implement code here
-    return -1;
+int ALRemoveFirst(AList list, int *size)
+{
+    int counter, emptyList = -1;
+    if(*size > 0)
+    {
+        emptyList = 0;
+        for(counter = 0; counter < *size; counter++)//////////////////
+            list[counter] = list[counter+1];
+        (*size)--;
+    }
+    return emptyList;
 }
 
 /*
@@ -127,9 +171,15 @@ int ALRemoveFirst(AList list, int *size) {
  * Returns 0 on success.
  * Returns -1 in case of empty list.
  */
-int ALRemoveLast(AList list, int *size) {
-    // TODO Implement code here
-    return -1;
+int ALRemoveLast(AList list, int *size)
+{
+    int emptyList = -1;
+    if(*size > 0)
+    {
+        emptyList = 0;
+        (*size)--;
+    }
+    return emptyList;
 }
 
 /*
@@ -143,9 +193,18 @@ int ALRemoveLast(AList list, int *size) {
  * Returns 0 on success.
  * Returns -1 in case it does not exist any element at the specified position
  */
-int ALRemoveAtPosition(AList list, int *size, int position) {
-    // TODO Implement code here
-    return -1;
+int ALRemoveAtPosition(AList list, int *size, int position)
+{
+    int existingElement = -1;
+    if(*size > 0)
+    {
+        int counter;
+        existingElement = 0;
+        for(counter = position; counter < (*size)-1; counter++)
+            list[counter] = list[counter+1];
+        (*size)--;
+    }
+    return existingElement;
 }
 
 /*
@@ -157,9 +216,17 @@ int ALRemoveAtPosition(AList list, int *size, int position) {
  * Returns 0 on success.
  * Return -1 in case of emtpy list. 
  */
-int ALEmptyList(AList *list, int *size, int *dimension) {
-    // TODO Implement code here
-    return -1;
+int ALEmptyList(AList *list, int *size, int *dimension)
+{
+    int emptyList = -1;
+    if(*size > 0)
+    {
+        emptyList = 0;
+        *size = 0;
+        *dimension = 0;
+        free(*list);
+    }
+    return emptyList;
 }
 
 
@@ -169,7 +236,22 @@ int ALEmptyList(AList *list, int *size, int *dimension) {
  * Returns 0 on success.
  * Return -1 if memory allocation fails. 
  */
-int ALShrink(AList *list, int *size, int *dimension) {
-    // TODO Implement code here
-    return -1;
+int ALShrink(AList *list, int *size, int *dimension)
+{
+    int allocationError = -1;
+    if(*size < *dimension)
+    {
+        int counter;
+        AList newArrayList = (AList)malloc(*size*sizeof(int));
+        if(newArrayList != NULL)
+        {
+            allocationError = 0;
+            for(counter = 0; counter < *size; counter++)
+                newArrayList[counter] = (*list)[counter];
+            free(*list);
+            *list = newArrayList;
+            *dimension = *size;
+        }
+    }
+    return allocationError;
 }
