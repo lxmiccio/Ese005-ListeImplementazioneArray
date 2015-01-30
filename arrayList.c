@@ -89,16 +89,20 @@ int ALInsertAtEnd(AList *list, int *size, int *dimension, int key)
  */
 int ALInsertAtPosition(AList *list, int *size, int *dimension, int key, int position)
 {
-    int allocationError = -1, counter, returnValue = 0;
-    if(*dimension == *size)
-        returnValue = ALIncreaseAndCopy(list, *size, dimension);
-    if(returnValue == 0)
+    int allocationError = -1;
+    if(position >= 0)
     {
-        allocationError = 0;
-        for(counter=(*size)-1; counter>=position; counter--)
-            (*list)[counter+1] = (*list)[counter];
-        (*list)[position] = key;
-        (*size)++;
+        int counter, returnValue = 0;
+        if(*dimension == *size)
+            returnValue = ALIncreaseAndCopy(list, *size, dimension);
+        if(returnValue == 0 && position < *dimension)
+        {
+            allocationError = 0;
+            for(counter=(*size)-1; counter>=position; counter--)
+                (*list)[counter+1] = (*list)[counter];
+            (*list)[position] = key;
+            (*size)++;
+        }
     }
     return allocationError;
 }
@@ -156,7 +160,7 @@ int ALRemoveFirst(AList list, int *size)
     if(*size > 0)
     {
         emptyList = 0;
-        for(counter = 0; counter < *size; counter++)//////////////////
+        for(counter = 0; counter < (*size)-1; counter++)
             list[counter] = list[counter+1];
         (*size)--;
     }
@@ -196,7 +200,7 @@ int ALRemoveLast(AList list, int *size)
 int ALRemoveAtPosition(AList list, int *size, int position)
 {
     int existingElement = -1;
-    if(*size > 0)
+    if(position >= 0 && *size > 0 && position < *size)
     {
         int counter;
         existingElement = 0;
@@ -242,11 +246,11 @@ int ALShrink(AList *list, int *size, int *dimension)
     if(*size < *dimension)
     {
         int counter;
-        AList newArrayList = (AList)malloc(*size*sizeof(int));
+        AList newArrayList = (AList)malloc((*size)*sizeof(int));
         if(newArrayList != NULL)
         {
             allocationError = 0;
-            for(counter = 0; counter < *size; counter++)
+            for(counter = 0; counter < (*size); counter++)
                 newArrayList[counter] = (*list)[counter];
             free(*list);
             *list = newArrayList;
